@@ -30,7 +30,7 @@
       <div id="main">
         <div class="container">
           <div class="row">
-            <div class="hero">
+            <div class="hero" data-wip="superman">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-superman.png" alt="" class="img-responsive">
               </div>
@@ -38,7 +38,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="scarlet">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-scarlet.png" alt="" class="img-responsive">
               </div>
@@ -46,7 +46,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="original">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-original.png" alt="" class="img-responsive">
               </div>
@@ -54,7 +54,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="thor">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-thor.png" alt="" class="img-responsive">
               </div>
@@ -62,7 +62,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="greenarrow">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-greenarrow.png" alt="" class="img-responsive">
               </div>
@@ -72,7 +72,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="hero">
+            <div class="hero" data-wip="angel">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-angel.png" alt="" class="img-responsive">
               </div>
@@ -80,7 +80,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="blackwidow">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-blackwidow.png" alt="" class="img-responsive">
               </div>
@@ -88,7 +88,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="captainamerica">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-captainamerica.png" alt="" class="img-responsive">
               </div>
@@ -96,7 +96,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="catwoman">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-catwoman.png" alt="" class="img-responsive">
               </div>
@@ -104,7 +104,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="cyclops">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-cyclops.png" alt="" class="img-responsive">
               </div>
@@ -112,7 +112,7 @@
                 <h1>Select</h1>
               </div>
             </div>
-            <div class="hero">
+            <div class="hero" data-wip="hulk">
               <div class="image-hero">
                 <img src="assets/img/wippo/wippo-hulk.png" alt="" class="img-responsive">
               </div>
@@ -124,7 +124,13 @@
         </div>
       </div>
     </div>
+    <script src = "https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script>
+      $(document).ready(function(){
+        $('.hero').click(function(){
+          window.location = (window.location.hostname+"game.html?char="+$(this).data('wip'));
+        });
+      });
     </script>
   </body>
 </html>

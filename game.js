@@ -14,7 +14,7 @@ window.onload = function() {
      var powerTween;
      var placedPoles;
 	var poleGroup;
-     var minPoleGap = 100;
+     var minPoleGap = 120;
      var maxPoleGap = 250;
      var ninjaJumping;
      var ninjaFallingDown;
@@ -25,10 +25,15 @@ window.onload = function() {
 		preload:function(){
 			game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 			game.scale.setScreenSize(true);
-			game.load.image("ninja", "ninja.png");
+			// select character
+			var char = "assets/img/wippo_game/wippo-"+$.urlParam('char')+".png";
+			console.log(char);
+
+			game.load.image("ninja", char);
 			game.load.image("pole", "pole.jpg");
-            game.load.image("powerbar", "powerbar.png");
-            game.load.image("background", "bg_wipcamp.png");
+      game.load.image("powerbar", "powerbar.png");
+      game.load.image("background", "assets/img/bg_wipcamp.jpg");
+
 		},
 		create:function(){
 			ninjaJumping = false;
@@ -38,16 +43,25 @@ window.onload = function() {
 			jumps = 0;
 
 			var bg = game.add.tileSprite(0, 0, 1000, 600, 'background');
-			bg.x = 0;
-    		bg.y = 0;
-    		bg.height = game.height;
-    		bg.width = game.width;
-    		bg.smoothed = false;
+			if (game.width < 1440) {
+				var x = ((1440-game.width)/2)*-1;
+				bg.x = x;
+				bg.width = 1440;
+			}
+			else{
+				bg.x = 0;
+				bg.width = game.width;
+			}
+  		bg.y = 0;
+  		bg.height = game.height;
+
+  		bg.smoothed = false;
 
 			poleGroup = game.add.group();
 			topScore = localStorage.getItem("topFlappyScore")==null?0:localStorage.getItem("topFlappyScore");
-			scoreText = game.add.text(game.width-150,20,"-",{
-				font:"bold 24px Arial",
+			hero = localStorage.getItem("hero")==null?'none':localStorage.getItem("hero");
+			scoreText = game.add.text(game.width-200,20,"-",{
+				font:"bold 16px Arial",
 				fill: "#ffffff"
 			});
 			updateScore();
@@ -70,7 +84,7 @@ window.onload = function() {
      game.state.add("Play",play);
      game.state.start("Play");
 	function updateScore(){
-		scoreText.text = "Score: "+score+"\nBest: "+topScore;
+		scoreText.text = "Score: "+score+"\nHero: "+hero+"\nBest: "+topScore;
 	}
 	function prepareToJump(){
 		if(ninja.body.velocity.y==0 || jumps<maxExtraJumps){
@@ -117,13 +131,14 @@ window.onload = function() {
 	}
 	function die(){
 		localStorage.setItem("topFlappyScore",Math.max(score,topScore));
+		if(Math.max(score,topScore))localStorage.setItem("hero",$.urlParam('char').capitalizeFirstLetter());
 		game.state.start("Play");
 	}
 	function checkLanding(n,p){
 		game.input.onDown.remove(prepareToJump, this);
 		if(n.body.touching.down){
 			var border = n.x-p.x
-			if(Math.abs(border)>30){
+			if(Math.abs(border)>35){
 				n.body.velocity.x=border*2;
 				n.body.velocity.y=-200;
 			}
@@ -168,5 +183,13 @@ window.onload = function() {
 			this.destroy();
 			addNewPoles();
 		}
+	}
+
+	$.urlParam = function(name){
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	return results[1] || 0;
+	}
+	String.prototype.capitalizeFirstLetter = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 }
