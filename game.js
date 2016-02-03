@@ -60,8 +60,8 @@ window.onload = function() {
 			poleGroup = game.add.group();
 			topScore = localStorage.getItem("topFlappyScore")==null?0:localStorage.getItem("topFlappyScore");
 			hero = localStorage.getItem("hero")==null?'none':localStorage.getItem("hero");
-			scoreText = game.add.text(game.width-200,20,"-",{
-				font:"bold 16px Arial",
+			scoreText = game.add.text(game.width-220,20,"-",{
+				font:"bold 22px Arial",
 				fill: "#ffffff"
 			});
 			updateScore();
