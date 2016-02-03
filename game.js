@@ -1,32 +1,32 @@
-window.onload = function() {	
+window.onload = function() {
 	//var game = new Phaser.Game(640, 480, Phaser.CANVAS);
 	var innerWidth = window.innerWidth;
 	var innerHeight = window.innerHeight;
-	var gameRatio = innerWidth/innerHeight;	
-	var game = new Phaser.Game(Math.floor(720*gameRatio), 720, Phaser.CANVAS);	
+	var gameRatio = innerWidth/innerHeight;
+	var game = new Phaser.Game(Math.floor(720*gameRatio), 720, Phaser.CANVAS);
 	var ninja;
 	var ninjaGravity = 800;
-	var ninjaJumpPower;    
+	var ninjaJumpPower;
 	var score=0;
 	var scoreText;
      var topScore;
      var powerBar;
      var powerTween;
      var placedPoles;
-	var poleGroup; 
+	var poleGroup;
      var minPoleGap = 100;
-     var maxPoleGap = 250; 
+     var maxPoleGap = 250;
      var ninjaJumping;
-     var ninjaFallingDown; 
-	var jumps; 
-	var maxExtraJumps = 1;   
-     var play = function(game){}     
+     var ninjaFallingDown;
+	var jumps;
+	var maxExtraJumps = 1;
+     var play = function(game){}
      play.prototype = {
 		preload:function(){
 			game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 			game.scale.setScreenSize(true);
-			game.load.image("ninja", "ninja.png"); 
-			game.load.image("pole", "pole.png");
+			game.load.image("ninja", "ninja.png");
+			game.load.image("pole", "pole.jpg");
             game.load.image("powerbar", "powerbar.png");
             game.load.image("background", "bg_wipcamp.png");
 		},
@@ -56,7 +56,7 @@ window.onload = function() {
 			ninja = game.add.sprite(80,0,"ninja");
 			ninja.anchor.set(0.5);
 			ninja.lastPole = 1;
-			game.physics.arcade.enable(ninja);              
+			game.physics.arcade.enable(ninja);
 			ninja.body.gravity.y = ninjaGravity;
 			addPole(80);
 		},
@@ -66,12 +66,12 @@ window.onload = function() {
 				die();
 			}
 		}
-	}     
+	}
      game.state.add("Play",play);
      game.state.start("Play");
 	function updateScore(){
-		scoreText.text = "Score: "+score+"\nBest: "+topScore;	
-	}     
+		scoreText.text = "Score: "+score+"\nBest: "+topScore;
+	}
 	function prepareToJump(){
 		if(ninja.body.velocity.y==0 || jumps<maxExtraJumps){
 			jumps++;
@@ -79,11 +79,11 @@ window.onload = function() {
 	          powerBar.width = 0;
 	          powerTween = game.add.tween(powerBar).to({
 			   width:100
-			}, 1000, "Linear",true); 
+			}, 1000, "Linear",true);
 			game.input.onDown.remove(prepareToJump, this);
 			game.input.onUp.add(jump, this);
-          }        	
-	}     
+          }
+	}
      function jump(){
           ninjaJumpPower= -powerBar.width*3-100
           powerBar.destroy();
@@ -92,17 +92,17 @@ window.onload = function() {
           ninjaJumping = true;
           powerTween.stop();
           game.input.onUp.remove(jump, this);
-		if(jumps<maxExtraJumps){  
-			game.input.onDown.add(prepareToJump, this);     
-		}  
-     }     
+		if(jumps<maxExtraJumps){
+			game.input.onDown.add(prepareToJump, this);
+		}
+     }
      function addNewPoles(){
      	var maxPoleX = 0;
 		poleGroup.forEach(function(item) {
-			maxPoleX = Math.max(item.x,maxPoleX)			
+			maxPoleX = Math.max(item.x,maxPoleX)
 		});
 		var nextPolePosition = maxPoleX + game.rnd.between(minPoleGap,maxPoleGap);
-		addPole(nextPolePosition);			
+		addPole(nextPolePosition);
 	}
 	function addPole(poleX){
 		if(poleX<game.width*2){
@@ -114,40 +114,40 @@ window.onload = function() {
 			var nextPolePosition = poleX + game.rnd.between(minPoleGap,maxPoleGap);
 			addPole(nextPolePosition);
 		}
-	}	
+	}
 	function die(){
-		localStorage.setItem("topFlappyScore",Math.max(score,topScore));	
+		localStorage.setItem("topFlappyScore",Math.max(score,topScore));
 		game.state.start("Play");
 	}
 	function checkLanding(n,p){
 		game.input.onDown.remove(prepareToJump, this);
 		if(n.body.touching.down){
 			var border = n.x-p.x
-			if(Math.abs(border)>23){
+			if(Math.abs(border)>30){
 				n.body.velocity.x=border*2;
-				n.body.velocity.y=-200;	
+				n.body.velocity.y=-200;
 			}
 			else{
-				jumps=0;          
+				jumps=0;
                	game.input.onDown.add(prepareToJump, this);
 			}
 			var poleDiff = p.poleNumber-n.lastPole;
 			if(poleDiff>0){
 				score+= Math.pow(2,poleDiff);
-				updateScore();	
+				updateScore();
 				n.lastPole= p.poleNumber;
 				ninja.x=80;
 			}
 			if(ninjaJumping){
-               	ninjaJumping = false;    
+               	ninjaJumping = false;
           	}
 		}
 		else{
 			ninjaFallingDown = true;
 			poleGroup.forEach(function(item) {
-				item.body.velocity.x = 0;			
+				item.body.velocity.x = 0;
 			});
-		}			
+		}
 	}
 	Pole = function (game, x, y) {
 		Phaser.Sprite.call(this, game, x, y, "pole");
@@ -168,5 +168,5 @@ window.onload = function() {
 			this.destroy();
 			addNewPoles();
 		}
-	}	
+	}
 }
