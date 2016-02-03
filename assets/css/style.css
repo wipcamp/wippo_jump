@@ -1,0 +1,132 @@
+@font-face {
+    font-family: 'thai_sans_literegular';
+    src: url(../fonts/thaisanslite_r1-webfont.eot);
+    src: url(../fonts/thaisanslite_r1-webfont.eot?#iefix) format('embedded-opentype'),
+         url(../fonts/thaisanslite_r1-webfont.woff2) format('woff2'),
+         url(../fonts/thaisanslite_r1-webfont.woff) format('woff'),
+         url(../fonts/thaisanslite_r1-webfont.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html{
+    font-family: 'thai_sans_literegular' !important;
+}
+
+body{
+    background-color: #0c141e !important;
+    color:#fff !important;
+    overflow: hidden !important;
+    font-family: 'thai_sans_literegular' !important;
+}
+
+.container {
+    background-position: 100% 100%;
+    background-size: 100% 100%;
+    position: relative;
+    min-width: 980px;
+}
+#scene .layout .header {
+    position: absolute;
+    left: 50%;
+    top: 3%
+}
+#scene .layout .logo {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+}
+#scene .layout .header .camp_name {
+    width: 28.7em;
+    height: auto;
+    margin: 0 auto
+}
+#scene .layout .header .camp_way {
+    width: 25em;
+    height: auto;
+    margin: -3.0625em auto 0
+}
+#scene .layout .header .sponser {
+    width: 19em;
+    height: auto;
+    margin: -1.6em auto
+}
+#scene .layout .town>div {
+    position: absolute;
+    bottom: 0;
+    width: 120%;
+    left: -6em;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center bottom
+}
+#scene .layout .town .town-front {
+    background-image: url(../img/layout/t1_1.png);
+    bottom: -.2em;
+    max-height: 34em;
+    height: 100%;
+    z-index: 0;
+}
+#scene .layout .town .town-mid {
+    background-image: url(../img/layout/t2.png);
+    bottom: -1.6em;
+    max-height: 34em;
+    height: 100%;
+    z-index:-2;
+}
+#scene .layout .town .town-back {
+    background-image: url(../img/layout/t.png);
+    bottom: -1.6em;
+    max-height: 34em;
+    height: 100%;
+    z-index: -3;
+}
+
+/* Main Section */
+
+#main {
+  width: 100%;
+  height: 100%;
+}
+#main .container{
+  background: rgba(0,0,0,0.6);
+  height: 100%;
+  padding: 20px;
+  box-sizing: content-box;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+#main a{
+  display: block;
+}
+#main .hero .image-hero{
+  margin: 0 auto;
+}
+#main img.img-responsive {
+    height: 150px;
+}
+#main .row {
+  display: block;
+}
+#main .row .hero{
+  display: inline-block;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid rgba(255,255,255,0.13);
+  border-radius: 15%;
+  background-color: rgba(255,255,255,0.1);
+  width: 115px;
+  height: 200px;
+  opacity: 0.6;
+  cursor: pointer;
+}
+#main .row .hero:hover{
+  opacity: 1;
+
+}
+
+.hero .name h1 {
+  padding: 0;
+  margin: 0;
+}
