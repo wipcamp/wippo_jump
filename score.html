@@ -1,0 +1,102 @@
+<html>
+
+<head>
+  <title>WIPPO 8 JUMPER</title>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"> -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="assets/css/score.css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <script type="text/javascript" async="" src="//u.heatmap.it/conf/game.wip.camp.js"></script>
+  <script type="text/javascript" async="" src="//u.heatmap.it/log.js"></script>
+  <script async="" src="//www.google-analytics.com/analytics.js"></script>
+  <script>
+  (function(i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function() {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-28869618-3', 'auto');
+  ga('send', 'pageview');
+
+
+
+  (function() {
+    var hm = document.createElement('script');
+    hm.type = 'text/javascript';
+    hm.async = true;
+    hm.src = ('++u-heatmap-it+log-js').replace(/[+]/g, '/').replace(/-/g, '.');
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+  </script>
+</head>
+
+<body>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <h1 class="name">ผู้เล่นอันดับหนึ่ง: </h1>
+      <h1 class="score">คะแนน: </h1>
+    </div>
+  </nav>
+  <div class="main container">
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>ชื่อคนเล่น</th>
+          <th>คะแนน</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+  <script>
+  $(document).ready(function() {
+    var i = 1;
+    var topName,score;
+    var HistoryRef = new Firebase('https://wippo-jump.firebaseio.com/history');
+    var OriginRef = new Firebase('https://wippo-jump.firebaseio.com');
+
+    OriginRef.once("value", function(snapshot) {
+       snapshot.forEach(function(data) {
+          console.log("The " + data.key() + " score is " + data.val());
+          if (data.key() == "name") {topName = data.val();topName = decodeURIComponent(topName)};
+          if (data.key() == "top") {score = data.val()};
+        });
+       $('.name').text("ผู้เล่นอันดับหนึ่ง: "+topName);
+       $('.score').text("คะแนน: "+score);
+      });
+
+    
+
+    HistoryRef.once("value", function(snapshot) {
+      snapshot.forEach(function(data) {
+        console.log(" " + data.val().name + " score is " + data.val().score);
+
+        var str = "<tr><th scope=\"row\">"+i+"</th><td>"+data.val().name+"</td><td>"+data.val().score+"</td></tr>";
+        i++;
+
+        $('tbody').append(str);
+        // if (data.key() == "name") {topName = data.val();topName = decodeURIComponent(topName)};
+        // if (data.key() == "top") {dummyScore = data.val()};
+      });
+      // topScore = dummyScore;
+    });
+  });
+  </script>
+</body>
+
+</html>
