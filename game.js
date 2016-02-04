@@ -1,6 +1,7 @@
 window.onload = function() {
 	//var game = new Phaser.Game(640, 480, Phaser.CANVAS);
 	var myDataRef = new Firebase('https://wippo-jump.firebaseio.com');
+	var HistoryRef = new Firebase('https://wippo-jump.firebaseio.com/history');
 	var innerWidth = window.innerWidth;
 	var innerHeight = window.innerHeight;
 	var gameRatio = innerWidth/innerHeight;
@@ -223,7 +224,7 @@ window.onload = function() {
 		else
 			console.log('false');
 
-		myDataRef.push({ 'name': hero, 'score': score });
+		HistoryRef.push({ 'name': hero, 'score': score });
 
 	}
 	function actionOnClick_main () {
@@ -236,7 +237,7 @@ window.onload = function() {
 		else
 			console.log('false');
 
-		myDataRef.push({ 'name': hero, 'score': score });
+		HistoryRef.push({ 'name': hero, 'score': score });
 
 	}
 
