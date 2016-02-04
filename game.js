@@ -1,5 +1,6 @@
 window.onload = function() {
 	//var game = new Phaser.Game(640, 480, Phaser.CANVAS);
+	var myDataRef = new Firebase('https://wippo-jump.firebaseio.com');
 	var innerWidth = window.innerWidth;
 	var innerHeight = window.innerHeight;
 	var gameRatio = innerWidth/innerHeight;
@@ -11,7 +12,9 @@ window.onload = function() {
 	var button_re;
 	var button_main;
 	var scoreText;
-     var topScore;
+	var dummyscore;
+		 var topName = $.urlParam('bn');
+     var topScore = $.urlParam('bscore');
      var powerBar;
      var powerTween;
      var placedPoles;
@@ -29,16 +32,25 @@ window.onload = function() {
 			game.scale.setScreenSize(true);
 			// select character
 			var char = "assets/img/wippo_game/wippo-"+$.urlParam('char')+".png";
-			console.log(char);
-
 			game.load.image("ninja", char);
 			game.load.image("pole", "pole.jpg");
       game.load.image("powerbar", "powerbar.png");
       game.load.image("background", "assets/img/bg_wipcamp.jpg");
       game.load.spritesheet('button_re', 'assets/img/button_re.png', 206, 77);
       game.load.spritesheet('button_main', 'assets/img/button_main.png', 206, 77);
+
 		},
 		create:function(){
+			 myDataRef.once("value", function(snapshot) {
+	 		 snapshot.forEach(function(data) {
+	    		console.log("The " + data.key() + " score is " + data.val());
+	  			if (data.key() == "name") {topName = data.val();topName = decodeURIComponent(topName)};
+	 				if (data.key() == "top") {dummyScore = data.val()};
+	  		});
+	 		 topScore = dummyScore;
+	 		});
+
+
 			ninjaJumping = false;
 			ninjaFallingDown = false;
 			score = 0;
@@ -60,13 +72,18 @@ window.onload = function() {
 
   		bg.smoothed = false;
 
+  		// get high score
+
 			poleGroup = game.add.group();
-			topScore = localStorage.getItem("topFlappyScore")==null?0:localStorage.getItem("topFlappyScore");
-			hero = localStorage.getItem("hero")==null?'none':localStorage.getItem("hero");
-			scoreText = game.add.text(game.width-220,20,"-",{
-				font:"bold 22px Arial",
+			// topScore = localStorage.getItem("topFlappyScore")==null?0:localStorage.getItem("topFlappyScore");
+			hero = $.urlParam('name');
+			hero = decodeURIComponent(hero);
+			scoreText = game.add.text(game.width-300,20,"-",{
+				font:"bold 20px Helvetica",
 				fill: "#ffffff"
 			});
+			console.log(topName);
+			topName = decodeURIComponent(topName);
 			updateScore();
 			game.stage.backgroundColor = "#87CEEB";
 			game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -90,7 +107,7 @@ window.onload = function() {
      game.state.add("Play",play);
      game.state.start("Play");
 	function updateScore(){
-		scoreText.text = "Score: "+score+"\nHero: "+hero+"\nBest: "+topScore;
+		scoreText.text = "Player: "+hero+"\nScore: "+score+"\nBest Player: "+topName+"\nBest Score: "+topScore;
 	}
 	function prepareToJump(){
 		if(ninja.body.velocity.y==0 || jumps<maxExtraJumps){
@@ -137,7 +154,8 @@ window.onload = function() {
 	}
 	function die(){
 		localStorage.setItem("topFlappyScore",Math.max(score,topScore));
-		if(Math.max(score,topScore))localStorage.setItem("hero",$.urlParam('char').capitalizeFirstLetter());
+
+		// if(Math.max(score,topScore))localStorage.setItem("hero",$.urlParam('char').capitalizeFirstLetter());
 		// if(false)game.state.start("Play");
 	}
 	function checkLanding(n,p){
@@ -191,17 +209,48 @@ window.onload = function() {
 		}
 	}
 
-	$.urlParam = function(name){
-	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-	return results[1] || 0;
-	}
+	
 	String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 	}
 	function actionOnClick_re () {
 		game.state.start("Play");
+		if (score > topScore){
+			myDataRef.update({ top: score , name: $.urlParam('name')}, onComplete);
+			topScore = score;
+			topName = hero;
+		}
+		else
+			console.log('false');
+
+		myDataRef.push({ 'name': hero, 'score': score });
+
 	}
 	function actionOnClick_main () {
 		window.location.replace("http://game.wip.camp");
+		if (score > topScore){
+			myDataRef.update({ top: score , name: $.urlParam('name')}, onComplete);
+			topScore = score;
+			topName = hero;
+		}
+		else
+			console.log('false');
+
+		myDataRef.push({ 'name': hero, 'score': score });
+
 	}
+
+	var onComplete = function(error) {
+  if (error) {
+    console.log('Synchronization failed');
+  } else {
+    console.log('Synchronization succeeded');
+  }
+};
+
 }
+
+$.urlParam = function(name){
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	return results[1] || 0;
+	}
