@@ -8,6 +8,8 @@ window.onload = function() {
 	var ninjaGravity = 800;
 	var ninjaJumpPower;
 	var score=0;
+	var button_re;
+	var button_main;
 	var scoreText;
      var topScore;
      var powerBar;
@@ -33,7 +35,8 @@ window.onload = function() {
 			game.load.image("pole", "pole.jpg");
       game.load.image("powerbar", "powerbar.png");
       game.load.image("background", "assets/img/bg_wipcamp.jpg");
-
+      game.load.spritesheet('button_re', 'assets/img/button_re.png', 206, 77);
+      game.load.spritesheet('button_main', 'assets/img/button_main.png', 206, 77);
 		},
 		create:function(){
 			ninjaJumping = false;
@@ -78,6 +81,9 @@ window.onload = function() {
 			game.physics.arcade.collide(ninja, poleGroup, checkLanding);
 			if(ninja.y>game.height){
 				die();
+				button = game.add.button(game.world.centerX - 230, game.world.centerY, 'button_re', actionOnClick_re, this, 2, 1, 0);
+				button = game.add.button(game.world.centerX + 15, game.world.centerY, 'button_main', actionOnClick_main, this, 2, 1, 0);
+				game.stage.backgroundColor = "rgba(255, 255, 255, 0.5)";
 			}
 		}
 	}
@@ -132,7 +138,7 @@ window.onload = function() {
 	function die(){
 		localStorage.setItem("topFlappyScore",Math.max(score,topScore));
 		if(Math.max(score,topScore))localStorage.setItem("hero",$.urlParam('char').capitalizeFirstLetter());
-		game.state.start("Play");
+		// if(false)game.state.start("Play");
 	}
 	function checkLanding(n,p){
 		game.input.onDown.remove(prepareToJump, this);
@@ -191,5 +197,11 @@ window.onload = function() {
 	}
 	String.prototype.capitalizeFirstLetter = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
+	}
+	function actionOnClick_re () {
+		game.state.start("Play");
+	}
+	function actionOnClick_main () {
+		window.location.replace("http://game.wip.camp");
 	}
 }

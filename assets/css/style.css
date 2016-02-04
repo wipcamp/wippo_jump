@@ -24,7 +24,6 @@ body{
     background-position: 100% 100%;
     background-size: 100% 100%;
     position: relative;
-    width: 100%;
     display: table;
 }
 #scene .layout .header {
